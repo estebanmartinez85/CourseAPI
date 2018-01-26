@@ -1,6 +1,6 @@
-﻿using CourseAPI.Data.UOW;
-using CourseAPI.DTO.Roles;
-using CourseAPI.Models;
+﻿using CourseAPI.DTO.Roles;
+using Courses.Data.UOW;
+using Courses.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace CourseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(Roles = "Administrator")]
     public class RolesController : Controller
     {

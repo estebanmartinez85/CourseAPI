@@ -4,11 +4,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CourseAPI.Data;
-using CourseAPI.Data.Common.Repos;
-using CourseAPI.Data.Repos;
-using CourseAPI.Data.UOW;
-using CourseAPI.Models;
+using Courses.Data;
+using Courses.Data.Common.Repos;
+using Courses.Data.Repos;
+using Courses.Data.UOW;
+using Courses.Models;
+using Courses.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,21 +37,29 @@ namespace CourseAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string issuer, secret;
             if (_env.IsEnvironment("Testing"))
             {
                 services.AddDbContext<ApplicationDbContext>(
                     options => options.UseInMemoryDatabase("CourseTracker"));
+                issuer = Configuration["Auth:Issuer"];
+                secret = Configuration["Auth:Secret"];
 
             }
             else if (_env.IsDevelopment())
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+                issuer = Configuration["Auth:Issuer"];
+                secret = Configuration["Auth:Secret"];
             }
             else
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("SmartASP")));
+                    options.UseSqlServer(Configuration.GetConnectionString("DOLive")));
+                issuer = Configuration["AuthLive:Issuer"];
+                secret = Configuration["AuthLive:Secret"];
             }
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -71,9 +80,9 @@ namespace CourseAPI
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidIssuer = Configuration["Auth:Issuer"],
-                        ValidAudience = Configuration["Auth:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:Secret"])),
+                        ValidIssuer = issuer,
+                        ValidAudience = issuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
@@ -82,17 +91,15 @@ namespace CourseAPI
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IUowData), typeof(UowData));
-
+            services.AddScoped(typeof(CoursesService));
+            services.AddApiVersioning();
             services.AddMvc();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             if (env.IsDevelopment())

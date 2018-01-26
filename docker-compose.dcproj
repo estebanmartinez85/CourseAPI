@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>95f94e6b-3f4f-45d7-84cb-69d6c021e81f</ProjectGuid>
     <DockerLaunchBrowser>True</DockerLaunchBrowser>
-    <DockerServiceUrl>http://localhost:{ServicePort}/api/values</DockerServiceUrl>
+    <DockerServiceUrl>http://localhost:{ServicePort}/api/v1/values</DockerServiceUrl>
     <DockerServiceName>courseapi</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

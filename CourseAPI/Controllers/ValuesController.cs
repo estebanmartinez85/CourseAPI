@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CourseAPI.Data.Common.Repos;
-using CourseAPI.Models;
+﻿using System.Threading.Tasks;
+using Courses.Data.Common.Repos;
+using Courses.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ValuesController : Controller
     {
         private IRepository<Course> _courses;
@@ -31,9 +29,9 @@ namespace CourseAPI.Controllers
             //var user = new ApplicationUser { UserName = "mikloedm@gmail.com", Email = "mikloedm@gmail.com" };
             //var resultUser = await _userManager.CreateAsync(user, "1!Qaaaaaa");
             //await _roleManager.CreateAsync(new ApplicationRole("Administrator"));
-            //var user = await _userManager.FindByEmailAsync("mikloedm@gmail.com");
-            //var results = await _userManager.AddToRoleAsync(user, "Administrator");
-            return Ok(new { Test = "999" });
+            //var user2 = await _userManager.FindByEmailAsync("mikloedm@gmail.com");
+            //var results = await _userManager.AddToRoleAsync(user2, "Administrator");
+            return Ok(new { Test = Enumeration.FromValue<CourseStatus>(1).GetType() });
         }
 
         // GET api/values/5

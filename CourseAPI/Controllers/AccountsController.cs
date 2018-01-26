@@ -1,5 +1,5 @@
 ﻿using CourseAPI.DTO.Account;
-using CourseAPI.Models;
+using Courses.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -17,7 +15,8 @@ using System.Threading.Tasks;
 
 namespace CourseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(Roles = "Administrator")]
     public class AccountsController : Controller
     {
@@ -75,12 +74,12 @@ namespace CourseAPI.Controllers
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
-                if (result.Succeeded)
+                if (result.Succeeded) 
                 {
                     var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                     return await GenerateJwtToken(model.Email, appUser);
                 }
-                return new ForbidResult("Invalid email or password.");
+                return StatusCode(403, new { error = "Invalid email or password." });
             }
             return new BadRequestResult();
         }

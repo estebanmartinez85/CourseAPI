@@ -1,17 +1,17 @@
-﻿using CourseAPI.Data.Common.Repos;
-using CourseAPI.DTO.Libraries;
-using CourseAPI.Models;
+﻿using CourseAPI.DTO.Libraries;
+using Courses.Data.Common.Repos;
+using Courses.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseAPI.Controllers
 {
+
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(Roles = "Administrator")]
-    [Route("api/[controller]")]
     public class LibrariesController : Controller
     {
         private IRepository<Library> _repository;
@@ -21,7 +21,7 @@ namespace CourseAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet("All")]
         public IActionResult All()
         {
             var libraries = _repository
@@ -33,7 +33,16 @@ namespace CourseAPI.Controllers
                 }).ToList();
             return Ok(libraries);
         }
-
+        [HttpGet("{id}", Name = "Get")]
+        public IActionResult Get([FromRoute] int id)
+        {
+            Library library = _repository.All().Single(l => l.LibraryId == id);
+            if(library != null)
+            {
+                return Ok(library);
+            }
+            return new BadRequestResult();
+        }
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] LibrariesAddDTO model)
         {
@@ -45,13 +54,14 @@ namespace CourseAPI.Controllers
                 };
                 _repository.Add(library);
                 await _repository.SaveChangesAsync();
-                return Ok(library);
+                
+                return CreatedAtAction("Get", new { id = library.LibraryId }, null);
             }
             return new BadRequestResult();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove([FromRoute]int id)
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             try
             {

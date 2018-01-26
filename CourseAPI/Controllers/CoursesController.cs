@@ -1,12 +1,8 @@
-﻿using CourseAPI.Data.Common.Repos;
-using CourseAPI.Data.UOW;
-using CourseAPI.DTO.Course;
-using CourseAPI.Extensions;
-using CourseAPI.Models;
+﻿using CourseAPI.DTO.Course;
+using Courses.Models;
+using Courses.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,105 +10,89 @@ using System.Threading.Tasks;
 
 namespace CourseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(Roles = "Administrator,Writer,Narrator,Artist")]
     public class CoursesController : Controller
     {
-        protected IRepository<Course> _courses;
-        protected IUowData _data;
-        protected UserManager<ApplicationUser> _userManager;
-        protected RoleManager<ApplicationRole> _roleManager;
+        private CoursesService _courses;
 
-        public CoursesController(IUowData data, IRepository<Course> courses, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public CoursesController(CoursesService courses)
         {
-            _data = data;
-            _userManager = userManager;
-            _roleManager = roleManager;
             _courses = courses;
         }
-        [HttpGet]
+
+        [HttpGet("{id}", Name = nameof(GetCourse))]
+        public IActionResult GetCourse([FromRoute] int id)
+        {
+            Course course = _courses.GetCourse(id);
+            if (course != null)
+                return Ok(course);
+
+            return new NotFoundResult();
+        }
+
+        [HttpGet("All", Name = nameof(All))]
         public IActionResult All()
         {
-            List<Course> courses = _courses.All().ToList();
+            List<Course> courses = _courses.GetAllCourses();
             if (courses.Count == 0)
                 return new NoContentResult();
 
-            return Ok(courses);
+            return Ok(courses.Select( c =>
+                    new
+                    {
+                        c.LibraryId,
+                        c.Code,
+                        c.Title
+                    }
+                ));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CoursesAddDTO model)
         {
             if (ModelState.IsValid)
             {
-                Course course = new Course
-                {
-                    Title = model.Title,
-                    Code = model.Code,
-                    Status = "Created",
-                    LibraryId = model.LibraryId,
-                    Storyboard = new Storyboard(),
-                    CourseUsers = new List<CourseUsers>()
-                };
-                _courses.Add(course);
-                await _courses.SaveChangesAsync();
-
-                return Ok();
+                Course course = await _courses.AddNewCourse(model.Title, model.Code, model.LibraryId);
+                if (course != null)
+                    return CreatedAtAction(nameof(GetCourse), new { id = course.CourseId }, null);
             }
             return new BadRequestResult();
         }
 
-        [HttpGet("{Id}/Assigned")]
-        public IActionResult Assigned([FromRoute] int Id)
+        [HttpGet("{id}/Assigned", Name = nameof(Assigned))]
+        public IActionResult Assigned([FromRoute] int id)
         {
-            var users = _data.CourseUsers.All().Include(cu => cu.User).Where(c => c.CourseId == Id).Select(c => new {
-                c.UserId,
-                c.User.Email,
-                c.User.FirstName,
-                c.User.LastName
-            }).ToList();
+            var users = _courses.GetAssignedUsers(id);
             return Ok(users);
         }
-        [HttpPost("{Id}/Assign")]
+
+        [HttpPost("{id}/Assign")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Assign([FromRoute] int Id, [FromBody] CoursesAssignDTO model)
+        public async Task<IActionResult> Assign([FromRoute] int id, [FromBody] CoursesAssignDTO model)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _userManager.FindByIdAsync(model.UserId);
-
-                CourseUsers courseUsers = new CourseUsers { CourseId = Id, UserId = model.UserId };
-                _data.CourseUsers.Add(courseUsers);
-                await _data.CourseUsers.SaveChangesAsync();
-
-                return Ok();
+                bool result = await _courses.AssignUser(id, model.UserId);
+                if(result)
+                    return Ok();
             }
             return new BadRequestResult();
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Update([FromRoute] int Id, [FromBody] CoursesEditDTO model)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CoursesEditDTO model)
         {
             if (ModelState.IsValid)
             {
-                Course course = await _courses.GetByIdAsync(Id);
-                if (course != null)
+                try
                 {
-                    course.Title = model.Title;
-                    course.Code = model.Code;
-                    course.GraphicHoursGoal = model.GraphicHoursGoal;
-                    course.GraphicHoursActual = model.GraphicHoursActual;
-                    course.StoryboardHoursGoal = model.StoryboardHoursGoal;
-                    course.StoryboardHoursActual = model.StoryboardHoursActual;
-                    course.LibraryId = int.Parse(model.LibraryId);
-
-                    _courses.Update(course);
-                    await _courses.SaveChangesAsync();
-
+                    Course course = await _courses.UpdateBasic(id, model.Code, model.Title, model.LibraryId);
                     return Ok(course);
-                } else
+                } catch (Exception e)
                 {
-                    return new NotFoundResult();
+                    return StatusCode(422, new { Error = e.Message });
                 }
             }
             return new BadRequestResult();
