@@ -5,6 +5,7 @@
     <RuntimeIdentifiers>win10-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <UserSecretsId>f0eefd2c-96b4-4c4d-9bd7-5f269518da7b</UserSecretsId>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,18 +13,26 @@
     <Compile Remove="Migrations\**" />
     <Compile Remove="Models\**" />
     <Compile Remove="Services\**" />
+    <Compile Remove="Templates\**" />
     <Content Remove="Data\**" />
     <Content Remove="Migrations\**" />
     <Content Remove="Models\**" />
     <Content Remove="Services\**" />
+    <Content Remove="Templates\**" />
     <EmbeddedResource Remove="Data\**" />
     <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="Templates\**" />
     <None Remove="Data\**" />
     <None Remove="Migrations\**" />
     <None Remove="Models\**" />
     <None Remove="Services\**" />
+    <None Remove="Templates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\SirenModelExtension.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,17 +40,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.1" />
+    <PackageReference Include="FluentSiren" Version="0.6.1.5" />
+    <PackageReference Include="FluentSiren.AspNetCore.Mvc" Version="0.6.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="2.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
-    <PackageReference Include="morelinq" Version="2.9.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" />
+    <PackageReference Include="morelinq" Version="2.10.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="RiskFirst.Hateoas" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

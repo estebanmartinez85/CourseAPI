@@ -1,10 +1,16 @@
 ﻿using CourseAPI.DTO.Libraries;
-using Courses.Data.Common.Repos;
+using Courses.Services;
 using Courses.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using CourseAPI.Helpers;
+using CourseAPI.Responses.Libraries;
+using MoreLinq;
+using RiskFirst.Hateoas;
 
 namespace CourseAPI.Controllers
 {
@@ -14,61 +20,59 @@ namespace CourseAPI.Controllers
     [Authorize(Roles = "Administrator")]
     public class LibrariesController : Controller
     {
-        private IRepository<Library> _repository;
+        private readonly LibrariesService _service;
+        private ILinksService _linksService;
 
-        public LibrariesController(IRepository<Library> repository)
+        public LibrariesController(LibrariesService service, ILinksService linksService)
         {
-            _repository = repository;
+            _service = service;
+            _linksService = linksService;
         }
 
-        [HttpGet("All")]
+        [HttpGet(Name = "AllLibraries")]
         public IActionResult All()
         {
-            var libraries = _repository
-                .All()
-                .Select(
-                l => new {
-                    l.LibraryId,
-                    l.Title
-                }).ToList();
-            return Ok(libraries);
+            List<Library> libraries = _service.GetAll();
+            AllSirenResponse response = new AllSirenResponse(this, libraries);
+            return Ok(response.EntityToJson());
         }
+
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get([FromRoute] int id)
         {
-            Library library = _repository.All().Single(l => l.LibraryId == id);
-            if(library != null)
-            {
-                return Ok(library);
-            }
-            return new BadRequestResult();
+            Library library = _service.GetById(id);
+
+            if (library == null) return new BadRequestResult();
+            GetLibraryResponse response = new GetLibraryResponse(this, library);
+            return Ok(response.EntityToJson());
         }
-        [HttpPost]
+        [HttpPost(Name = "AddLibrary")]
         public async Task<IActionResult> Add([FromBody] LibrariesAddDTO model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return new BadRequestResult();
+            try
             {
-                Library library = new Library
-                {
-                    Title = model.Title
-                };
-                _repository.Add(library);
-                await _repository.SaveChangesAsync();
-                
-                return CreatedAtAction("Get", new { id = library.LibraryId }, null);
+                Library library = await _service.AddNewLibraryAsync(model.Title);
+                return Ok();
+            } catch
+            {
+                return StatusCode(422, new { error = "Duplicate Library Title" });
             }
-            return new BadRequestResult();
         }
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Edit([FromRoute]int id, [FromBody] LibrariesEditDTO model)
+        {
+            if (!ModelState.IsValid) return new BadRequestResult();
+            Library library = await _service.EditLibrary(id, model.Title);    
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute]int id)
+            return Ok();
+        }
+        [HttpDelete("{id}", Name = "DeleteLibrary")]
+        public IActionResult Delete([FromRoute]int id)
         {
             try
             {
-                Library library = _repository.All().Single(l => l.LibraryId == id);
-                _repository.Delete(library);
-                await _repository.SaveChangesAsync();
-
+                _service.DeleteLibrary(id);
                 return Ok();
             }
             catch

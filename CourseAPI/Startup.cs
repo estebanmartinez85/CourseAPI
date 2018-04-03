@@ -15,12 +15,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using FluentSiren.AspNetCore.Mvc.Formatters;
+using RiskFirst.Hateoas;
 
 namespace CourseAPI
 {
@@ -72,7 +75,6 @@ namespace CourseAPI
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
                 })
                 .AddJwtBearer(cfg =>
                 {
@@ -92,6 +94,7 @@ namespace CourseAPI
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IUowData), typeof(UowData));
             services.AddScoped(typeof(CoursesService));
+            services.AddScoped(typeof(LibrariesService));
             services.AddApiVersioning();
             services.AddMvc();
             
