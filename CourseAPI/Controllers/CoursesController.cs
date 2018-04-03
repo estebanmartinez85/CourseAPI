@@ -16,8 +16,6 @@ using CourseAPI.Responses.Courses;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using RiskFirst.Hateoas;
-using RiskFirst.Hateoas.Models;
 
 namespace CourseAPI.Controllers
 {

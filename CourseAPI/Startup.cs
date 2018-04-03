@@ -23,7 +23,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using FluentSiren.AspNetCore.Mvc.Formatters;
-using RiskFirst.Hateoas;
 
 namespace CourseAPI
 {
@@ -35,7 +34,7 @@ namespace CourseAPI
             _env = env;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IHostingEnvironment _env { get; set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)

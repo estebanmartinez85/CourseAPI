@@ -1,4 +1,6 @@
-﻿using Courses.Data.UOW;
+﻿using Courses.Data.Common.Repos;
+using Courses.Data.UOW;
+using Courses.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +13,9 @@ namespace CourseAPI.Controllers
     {
         private readonly IUowData _data;
 
-        public StoryboardsController(IUowData data)
+        public StoryboardsController(IRepository<Storyboard> storyboards)
         {
-            _data = data;
+            
         }
 
         [HttpGet("{id}")]

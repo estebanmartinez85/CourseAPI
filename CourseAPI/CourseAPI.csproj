@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RuntimeIdentifiers>win10-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
@@ -7,7 +6,6 @@
     <UserSecretsId>f0eefd2c-96b4-4c4d-9bd7-5f269518da7b</UserSecretsId>
     <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Data\**" />
     <Compile Remove="Migrations\**" />
@@ -30,15 +28,12 @@
     <None Remove="Services\**" />
     <None Remove="Templates\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="Extensions\SirenModelExtension.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="FluentSiren" Version="0.6.1.5" />
     <PackageReference Include="FluentSiren.AspNetCore.Mvc" Version="0.6.1.5" />
@@ -52,16 +47,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" />
     <PackageReference Include="morelinq" Version="2.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="RiskFirst.Hateoas" Version="2.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Courses\Courses.csproj" />
   </ItemGroup>
-
 </Project>

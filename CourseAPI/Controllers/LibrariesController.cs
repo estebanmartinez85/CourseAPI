@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using CourseAPI.Helpers;
 using CourseAPI.Responses.Libraries;
 using MoreLinq;
-using RiskFirst.Hateoas;
 
 namespace CourseAPI.Controllers
 {
@@ -21,12 +20,10 @@ namespace CourseAPI.Controllers
     public class LibrariesController : Controller
     {
         private readonly LibrariesService _service;
-        private ILinksService _linksService;
 
-        public LibrariesController(LibrariesService service, ILinksService linksService)
+        public LibrariesController(LibrariesService service)
         {
             _service = service;
-            _linksService = linksService;
         }
 
         [HttpGet(Name = "AllLibraries")]
