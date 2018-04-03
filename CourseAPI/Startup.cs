@@ -4,12 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Courses.Data;
-using Courses.Data.Common.Repos;
-using Courses.Data.Repos;
-using Courses.Data.UOW;
-using Courses.Models;
-using Courses.Services;
+using CourseAPI.Data;
+using CourseAPI.Data.Common.Repos;
+using CourseAPI.Data.Repos;
+using CourseAPI.Data.UOW;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +21,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using FluentSiren.AspNetCore.Mvc.Formatters;
+using CourseAPI.Models;
+using CourseAPI.Services;
 
 namespace CourseAPI
 {

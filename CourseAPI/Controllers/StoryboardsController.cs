@@ -1,8 +1,8 @@
-﻿using Courses.Data.Common.Repos;
-using Courses.Data.UOW;
-using Courses.Models;
+﻿using CourseAPI.Data.Common.Repos;
+using CourseAPI.Data.UOW;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CourseAPI.Models;
 
 namespace CourseAPI.Controllers
 {

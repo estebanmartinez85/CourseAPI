@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Courses.Data.Common.Repos;
-using Courses.Models;
+using CourseAPI.Data.Common.Repos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using CourseAPI.Models;
 
 namespace CourseAPI.Controllers
 {

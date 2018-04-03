@@ -1,6 +1,4 @@
 ﻿using CourseAPI.DTO.Course;
-using Courses.Models;
-using Courses.Services;
 using FluentSiren.Builders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +11,11 @@ using System.Threading.Tasks;
 using CourseAPI.Extensions;
 using CourseAPI.Helpers;
 using CourseAPI.Responses.Courses;
+using CourseAPI.Services;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using CourseAPI.Models;
 
 namespace CourseAPI.Controllers
 {

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Courses.Data.Common.Models;
-using Courses.Models;
 using FluentSiren.Builders;
 using FluentSiren.Models;
 using Microsoft.AspNetCore.Mvc;

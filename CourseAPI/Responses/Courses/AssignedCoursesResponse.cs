@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Courses.Models;
 using FluentSiren.Builders;
 using Microsoft.AspNetCore.Mvc;
+using CourseAPI.Models;
 
 namespace CourseAPI.Responses.Courses
 {

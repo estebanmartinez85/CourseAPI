@@ -1,6 +1,4 @@
 ﻿using CourseAPI.DTO.Roles;
-using Courses.Data.UOW;
-using Courses.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CourseAPI.Data.UOW;
+using CourseAPI.Models;
 
 namespace CourseAPI.Controllers
 {
