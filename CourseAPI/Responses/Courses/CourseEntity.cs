@@ -16,8 +16,15 @@ namespace CourseAPI.Responses.Courses
                 .WithProperty("id", _course.CourseId)
                 .WithProperty("code", course.Code)
                 .WithProperty("title", course.Title)
-                .WithProperty("status", course.Status.ToString())
-                .WithLink(
+                .WithProperty("status", course.Status.ToString());
+            foreach (CourseUsers cu in course.CourseUsers) {
+                this.WithSubEntity(new EmbeddedRepresentationBuilder()
+                    .WithClass("user")
+                    .WithRel("self")
+                    .WithProperty("user", cu.User));
+            }
+
+                this.WithLink(
                     new LinkBuilder()
                         .WithRel("self")
                         .WithHref(GetBaseURL() + "courses/"  + _course.CourseId));

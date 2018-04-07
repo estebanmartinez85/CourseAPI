@@ -37,6 +37,7 @@ namespace CourseAPI.Controllers
         public IActionResult GetCourse([FromRoute] int id)
         {
             Course course = _courses.GetCourse(id);
+            
             string userId = HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
             string role = HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Role).Value;
 
@@ -47,6 +48,13 @@ namespace CourseAPI.Controllers
 
             return new NotFoundResult();
         }
+
+        [HttpGet("{id}/Users")]
+        [Authorize(Roles = "Administrator")]
+        public  IActionResult AssignedToCourse([FromRoute] int id) {
+            return Ok(_courses.GetAssignedUsers(id));
+        }
+
 
         [HttpGet(Name = "AssignedCourses")]
         public IActionResult Assigned()
