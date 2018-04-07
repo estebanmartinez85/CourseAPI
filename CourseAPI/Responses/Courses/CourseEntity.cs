@@ -14,7 +14,9 @@ namespace CourseAPI.Responses.Courses
             _course = course;
             this.WithClass("course")
                 .WithProperty("id", _course.CourseId)
+                .WithProperty("code", course.Code)
                 .WithProperty("title", course.Title)
+                .WithProperty("status", course.Status.ToString())
                 .WithLink(
                     new LinkBuilder()
                         .WithRel("self")
@@ -63,18 +65,21 @@ namespace CourseAPI.Responses.Courses
                 .WithField(
                     new FieldBuilder()
                         .WithName("date")
-                        .WithType("datetime")));
+                        .WithType("string")));
             return this;
         }
 
-        public CourseEntity WithWriterMeetingComplete()
+        public CourseEntity WithWriterMeetingWaiting()
         {
             this.WithAction(new ActionBuilder()
-                .WithName("writer-meeting-complete")
-                .WithTitle("Writer Meeting Complete")
+                .WithName("writer-meeting-waiting")
+                .WithTitle("Writer Meeting Waiting")
                 .WithType("application/json")
                 .WithMethod("PATCH")
-                .WithHref(GetBaseURL() + "courses/" + _course.CourseId + "/WriterMeetingComplete"));
+                .WithHref(GetBaseURL() + "courses/" + _course.CourseId + "/WriterMeetingWaiting")
+                .WithField(new FieldBuilder()
+                    .WithName("complete")
+                    .WithType("bool")));
             return this;
         }
 

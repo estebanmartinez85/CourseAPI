@@ -7,11 +7,10 @@ using CourseAPI.Models;
 
 namespace CourseAPI.Responses.Courses
 {
-    public class ScheduleWriterMeetingResponse : BaseSirenEntity
+    public class ScheduleWriterMeetingResponse : CourseEntity
     {
-        public ScheduleWriterMeetingResponse(Controller controller, Course course ) : base(controller) {
-            this.WithSubEntity(new CourseEntity(controller, course)
-                                    .WithScheduleWriterMeeting());
+        public ScheduleWriterMeetingResponse(Controller controller, Course course ) : base(controller, course) {
+            WithScheduleWriterMeeting();
         }
     }
 }

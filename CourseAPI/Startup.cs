@@ -39,6 +39,13 @@ namespace CourseAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsAll",
+                    policy => policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
             string issuer, secret;
             if (_env.IsEnvironment("Testing"))
             {
@@ -94,6 +101,8 @@ namespace CourseAPI
             services.AddScoped(typeof(IUowData), typeof(UowData));
             services.AddScoped(typeof(CoursesService));
             services.AddScoped(typeof(LibrariesService));
+            services.AddScoped(typeof(AccountsService));
+            services.AddScoped(typeof(RolesService));
             services.AddApiVersioning();
             services.AddMvc();
             
@@ -102,6 +111,7 @@ namespace CourseAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseCors("CorsAll");
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             if (env.IsDevelopment())

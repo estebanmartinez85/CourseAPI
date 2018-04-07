@@ -11,7 +11,6 @@ namespace CourseAPI.Controllers
     [Authorize]
     public class StoryboardsController : Controller
     {
-        private readonly IUowData _data;
 
         public StoryboardsController(IRepository<Storyboard> storyboards)
         {

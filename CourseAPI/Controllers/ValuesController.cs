@@ -29,7 +29,7 @@ namespace CourseAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public IActionResult GetAsync()
+        public async Task<IActionResult> GetAsync()
         {
             //List<Course> courses = _courses.All().ToList();
             //var user = new ApplicationUser { UserName = "mikloedm@gmail.com", Email = "mikloedm@gmail.com" };
@@ -44,6 +44,12 @@ namespace CourseAPI.Controllers
             //var user2 = await _userManager.FindByEmailAsync("mikloedm2@gmail2.com");
             //var results = await _userManager.AddToRoleAsync(user2, "Writer");
 
+            var user = new ApplicationUser { UserName = "mikloedm3@gmail2.com", Email = "mikloedm3@gmail2.com" };
+            var resultUser = await _userManager.CreateAsync(user, "1!Qaaaaaa");
+            await _roleManager.CreateAsync(new ApplicationRole("Writer"));
+            var user2 = await _userManager.FindByEmailAsync("mikloedm3@gmail2.com");
+            var results = await _userManager.AddToRoleAsync(user2, "Writer");
+            
             return Ok(new {test=4});
         }
 

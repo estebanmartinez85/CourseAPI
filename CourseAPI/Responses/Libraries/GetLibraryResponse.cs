@@ -1,20 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using CourseAPI.Models;
 
 namespace CourseAPI.Responses.Libraries
 {
-    public class GetLibraryResponse : BaseSirenEntity
+    public class GetLibraryResponse : LibraryEntity
     {
-        public GetLibraryResponse(Controller controller, Library library) : base(controller)
+        public GetLibraryResponse(Controller controller, Library library) : base(controller, library)
         {
-            this.WithSubEntity(new LibraryEntity(controller, library)
-                .WithEditLibrary()
-                .WithDeleteLibrary());
+ 
         }
     }
 }

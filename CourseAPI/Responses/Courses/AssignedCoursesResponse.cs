@@ -18,6 +18,22 @@ namespace CourseAPI.Responses.Courses
                 this.WithSubEntity(new CourseEntity(controller, course)
                     .WithDeleteCourse());
             }
+            WithAction(new ActionBuilder()
+                .WithName("add-course")
+                .WithTitle("Add Course")
+                .WithType("application/json")
+                .WithMethod("POST")
+                .WithHref($"{controller.Request.Scheme}://{controller.Request.Host}{controller.Request.Path}")
+                .WithField(new FieldBuilder()
+                    .WithName("title")
+                    .WithType("text"))
+                .WithField(new FieldBuilder()
+                    .WithName("libraryid")
+                    .WithType("text"))
+                .WithField(new FieldBuilder()
+                    .WithName("code")
+                    .WithType("text")));
+            
         }
     }
 }

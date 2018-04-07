@@ -50,7 +50,8 @@ namespace CourseAPI.Controllers
             try
             {
                 Library library = await _service.AddNewLibraryAsync(model.Title);
-                return Ok();
+                AddLibraryResponse response = new AddLibraryResponse(this, library);
+                return Ok(response.EntityToJson());
             } catch
             {
                 return StatusCode(422, new { error = "Duplicate Library Title" });
@@ -61,16 +62,20 @@ namespace CourseAPI.Controllers
         {
             if (!ModelState.IsValid) return new BadRequestResult();
             Library library = await _service.EditLibrary(id, model.Title);    
-
-            return Ok();
+            EditLibraryResponse response = new EditLibraryResponse(this, library);
+            return Ok(response.EntityToJson());
         }
         [HttpDelete("{id}", Name = "DeleteLibrary")]
-        public IActionResult Delete([FromRoute]int id)
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             try
             {
-                _service.DeleteLibrary(id);
-                return Ok();
+                if (await _service.DeleteLibrary(id)) {
+                    return Ok();
+                }
+                else {
+                    return new BadRequestResult();
+                }
             }
             catch
             {

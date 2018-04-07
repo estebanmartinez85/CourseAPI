@@ -18,10 +18,18 @@ namespace CourseAPI.Responses.Libraries
                 .WithProperty("count", libraries.Count);
             foreach (Library library in libraries) {
                 this.WithSubEntity(new LibraryEntity(controller, library)
-                                            .WithAddLibrary()
                                             .WithEditLibrary()
                                             .WithDeleteLibrary());
             }
+                this.WithAction( new ActionBuilder()
+                    .WithName("add-library")
+                    .WithTitle("Add Library")
+                    .WithType("application/json")
+                    .WithMethod("POST")
+                    .WithHref($"{controller.Request.Scheme}://{controller.Request.Host}{controller.Request.Path}")
+                    .WithField(new FieldBuilder()
+                        .WithName("title")
+                        .WithType("text")));
         }
     }
 }

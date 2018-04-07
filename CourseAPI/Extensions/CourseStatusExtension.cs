@@ -17,9 +17,10 @@ namespace CourseAPI.Extensions
                 case CourseStatus.AssignWriter:
                     return new AssignWriterResponse(controller, course);
                 case CourseStatus.ScheduleWriterMeeting:
-                    break;
+                    return new ScheduleWriterMeetingResponse(controller, course);
                 case CourseStatus.WriterMeetingWaiting:
-                    break;
+                    return new CourseEntity(controller, course)
+                        .WithWriterMeetingWaiting();
                 case CourseStatus.Storyboard:
                     break;
                 case CourseStatus.StoryboardReview:

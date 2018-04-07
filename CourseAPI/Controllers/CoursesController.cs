@@ -126,9 +126,11 @@ namespace CourseAPI.Controllers
         //ScheduleWriterMeeting
         [HttpPatch("{id}/ScheduleWriterMeeting")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> ScheduleWriterMeeting([FromRoute] int id, [FromBody] DateTime dateTime) {
+        public async Task<IActionResult> ScheduleWriterMeeting([FromRoute] int id, [FromBody] ScheduleWriterMeetingDTO model) {
+            if (!ModelState.IsValid) return new BadRequestResult();
+            
             try {
-                Course course = await _courses.ScheduleWriterMeeting(id, dateTime);
+                Course course = await _courses.ScheduleWriterMeeting(id, model.Date);
                 return Ok(course.Status.GetResponse(this, course).EntityToJson());
             }
             catch (Exception e) {
@@ -138,11 +140,11 @@ namespace CourseAPI.Controllers
         }
 
         //SetMeetingComplete
-        [HttpPatch("{id}/WriterMeetingComplete")]
+        [HttpPatch("{id}/WriterMeetingWaiting")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> WriterMeetingComplete([FromRoute] int id) {
+        public async Task<IActionResult> WriterMeetingWaiting([FromRoute] int id) {
             try {
-                Course course = await _courses.WriterMeetingComplete(id);
+                Course course = await _courses.WriterMeetingWaiting(id);
                 return Ok(course.Status.GetResponse(this, course).EntityToJson());
             }
             catch (Exception e) {
