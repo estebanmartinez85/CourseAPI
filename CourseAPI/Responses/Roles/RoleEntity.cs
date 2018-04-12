@@ -6,8 +6,8 @@ using CourseAPI.Models;
 namespace CourseAPI.Responses.Roles
 {
     public class RoleEntity : BaseSirenEntity {
-        private ApplicationRole _role;
-        public RoleEntity(Controller controller, ApplicationRole role) : base(controller) {
+        private readonly ApplicationRole _role;
+        public RoleEntity(ApplicationRole role) {
             _role = role;
             this.WithClass("role")
                 .WithProperty("id", role.Id)

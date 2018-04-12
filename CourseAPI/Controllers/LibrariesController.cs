@@ -30,7 +30,7 @@ namespace CourseAPI.Controllers
         public IActionResult All()
         {
             List<Library> libraries = _service.GetAll();
-            AllSirenResponse response = new AllSirenResponse(this, libraries);
+            AllSirenResponse response = new AllSirenResponse(libraries);
             return Ok(response.EntityToJson());
         }
 
@@ -40,7 +40,7 @@ namespace CourseAPI.Controllers
             Library library = _service.GetById(id);
 
             if (library == null) return new BadRequestResult();
-            GetLibraryResponse response = new GetLibraryResponse(this, library);
+            GetLibraryResponse response = new GetLibraryResponse(library);
             return Ok(response.EntityToJson());
         }
         [HttpPost(Name = "AddLibrary")]
@@ -50,7 +50,7 @@ namespace CourseAPI.Controllers
             try
             {
                 Library library = await _service.AddNewLibraryAsync(model.Title);
-                AddLibraryResponse response = new AddLibraryResponse(this, library);
+                AddLibraryResponse response = new AddLibraryResponse(library);
                 return Ok(response.EntityToJson());
             } catch
             {
@@ -62,7 +62,7 @@ namespace CourseAPI.Controllers
         {
             if (!ModelState.IsValid) return new BadRequestResult();
             Library library = await _service.EditLibrary(id, model.Title);    
-            EditLibraryResponse response = new EditLibraryResponse(this, library);
+            EditLibraryResponse response = new EditLibraryResponse(library);
             return Ok(response.EntityToJson());
         }
         [HttpDelete("{id}", Name = "DeleteLibrary")]

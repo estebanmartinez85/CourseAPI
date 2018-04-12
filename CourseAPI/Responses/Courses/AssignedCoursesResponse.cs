@@ -10,12 +10,12 @@ namespace CourseAPI.Responses.Courses
 {
     public class AssignedCoursesResponse : EntityBuilder
     {
-        public AssignedCoursesResponse(Controller controller, List<Course> courses) {
+        public AssignedCoursesResponse(List<Course> courses) {
             this.WithClass("course")
                 .WithClass("collection")
                 .WithProperty("count", courses.Count);
             foreach (Course course in courses) {
-                this.WithSubEntity(new CourseEntity(controller, course)
+                this.WithSubEntity(new CourseEntity(course)
                     .WithDeleteCourse());
             }
             WithAction(new ActionBuilder()
@@ -23,7 +23,7 @@ namespace CourseAPI.Responses.Courses
                 .WithTitle("Add Course")
                 .WithType("application/json")
                 .WithMethod("POST")
-                .WithHref($"{controller.Request.Scheme}://{controller.Request.Host}{controller.Request.Path}")
+                .WithHref($"http://localhost:5000/courses/")
                 .WithField(new FieldBuilder()
                     .WithName("title")
                     .WithType("text"))

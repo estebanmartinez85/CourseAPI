@@ -31,6 +31,7 @@ namespace CourseAPI.Services
         {
             return _courses
                        .All()
+                       .Include(c => c.Storyboard)
                        .Include(c => c.CourseUsers).ThenInclude(u => u.User)
                        .Single(c => c.CourseId == id) 
                             ?? throw new ArgumentNullException("No course with that id found.");
@@ -69,7 +70,9 @@ namespace CourseAPI.Services
         public List<Course> GetAssigned(string userId)
         {
             List<Course> courses = _courses
-                                    .All().Include(c => c.CourseUsers)
+                                    .All()
+                                    .Include(c => c.CourseUsers)
+                                    .Include(c => c.Storyboard)
                                     .Where(c => c.CourseUsers
                                     .Any(cu => cu.UserId == userId)).ToList();
             return courses;

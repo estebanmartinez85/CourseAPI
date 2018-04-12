@@ -11,7 +11,7 @@ namespace CourseAPI.Responses.Libraries
 {
     public class LibraryEntity : BaseSirenEntity {
         private Library _library;
-        public LibraryEntity(Controller controller, Library library) : base(controller) {
+        public LibraryEntity(Library library) {
             _library = library;
             this.WithClass("library")
                 .WithProperty("id", _library.LibraryId)
@@ -21,7 +21,7 @@ namespace CourseAPI.Responses.Libraries
                     .WithRel("self")
                     .WithHref(GetBaseURL() + "libraries/" + _library.LibraryId));
             foreach (Course course in _library.Courses) {
-                this.WithSubEntity(new CourseEntity(controller, course));
+                this.WithSubEntity(new CourseEntity(course));
             }
             
         }

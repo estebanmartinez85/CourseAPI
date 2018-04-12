@@ -6,6 +6,7 @@ using CourseAPI.Responses.Courses;
 using FluentSiren.Builders;
 using Microsoft.AspNetCore.Mvc;
 using CourseAPI.Models;
+using CourseAPI.Responses.Storyboard;
 
 namespace CourseAPI.Extensions
 {
@@ -15,14 +16,14 @@ namespace CourseAPI.Extensions
             switch (status)
             {
                 case CourseStatus.AssignWriter:
-                    return new AssignWriterResponse(controller, course);
+                    return new AssignWriterResponse(course);
                 case CourseStatus.ScheduleWriterMeeting:
-                    return new ScheduleWriterMeetingResponse(controller, course);
+                    return new ScheduleWriterMeetingResponse(course);
                 case CourseStatus.WriterMeetingWaiting:
-                    return new CourseEntity(controller, course)
+                    return new CourseEntity(course)
                         .WithWriterMeetingWaiting();
                 case CourseStatus.Storyboard:
-                    break;
+                    return new InStoryboardResponse(course);
                 case CourseStatus.StoryboardReview:
                     break;
                 case CourseStatus.StoryboardComplete:

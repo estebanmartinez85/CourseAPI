@@ -9,7 +9,7 @@ namespace CourseAPI.Responses.Courses
 {
     public class WriterMeetingCompleteResponse : CourseEntity
     {
-        public WriterMeetingCompleteResponse(Controller controller, Course course)  : base(controller, course) {
+        public WriterMeetingCompleteResponse(Course course)  : base(course) {
                 WithWriterMeetingWaiting();
         }  
     }

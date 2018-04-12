@@ -112,7 +112,7 @@ namespace CourseAPI.Controllers
             
             if (usersList.Count <= 0) return new BadRequestResult();
             
-            return Ok(new AccountsResponse(this, new ReadOnlyCollection<ApplicationUser>(usersList)).EntityToJson());
+            return Ok(new AccountsResponse(new ReadOnlyCollection<ApplicationUser>(usersList)).EntityToJson());
         }
 
         private async Task<string> GenerateJwtToken(string email, ApplicationUser user)

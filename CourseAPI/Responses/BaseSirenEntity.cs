@@ -12,17 +12,9 @@ namespace CourseAPI.Responses
 {
     public abstract class BaseSirenEntity : EntityBuilder, ISubEntityBuilder
     {
-        protected Controller _controller;
-        protected string _controllerName;
-
-        public BaseSirenEntity(Controller controller)
-        {
-            _controller = controller;
-            _controllerName = _controller.RouteData.Values["controller"].ToString();
-        }
         protected string GetBaseURL()
         {
-            return $"{_controller.Request.Scheme}://{_controller.Request.Host}/api/v1/";
+            return GlobalConstants.URL;
         }
     }
 }

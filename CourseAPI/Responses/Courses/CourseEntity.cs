@@ -9,13 +9,14 @@ using CourseAPI.Models;
 namespace CourseAPI.Responses.Courses
 {
     public class CourseEntity : BaseSirenEntity {
-        private Course _course;
-        public CourseEntity(Controller controller, Course course) : base(controller) {
+        private readonly Course _course;
+        public CourseEntity(Course course) {
             _course = course;
             this.WithClass("course")
                 .WithProperty("id", _course.CourseId)
                 .WithProperty("code", course.Code)
                 .WithProperty("title", course.Title)
+                .WithProperty("libraryId", course.LibraryId)
                 .WithProperty("status", course.Status.ToString());
             foreach (CourseUsers cu in course.CourseUsers) {
                 this.WithSubEntity(new EmbeddedRepresentationBuilder()
@@ -53,7 +54,7 @@ namespace CourseAPI.Responses.Courses
                 .WithTitle("Assign Writer")
                 .WithType("application/json")
                 .WithMethod("PATCH")
-                .WithHref(GetBaseURL() + "courses/" + _course.CourseId + "/AssignWriter")
+                .WithHref(GetBaseURL() + $"courses/{_course.CourseId}/AssignWriter")
                 .WithField(
                     new FieldBuilder()
                     .WithName("writerId")
@@ -61,14 +62,13 @@ namespace CourseAPI.Responses.Courses
             return this;
         }
 
-        public CourseEntity WithScheduleWriterMeeting()
-        {
+        public CourseEntity WithScheduleWriterMeeting() {
             this.WithAction(new ActionBuilder()
                 .WithName("schedule-writer-meeting")
                 .WithTitle("Schedule Writer Meeting")
                 .WithType("application/json")
                 .WithMethod("PATCH")
-                .WithHref(GetBaseURL() + "courses/" + _course.CourseId + "/ScheduleWriterMeeting")
+                .WithHref(GetBaseURL() + $"courses/{_course.CourseId}/ScheduleWriterMeeting")
                 .WithField(
                     new FieldBuilder()
                         .WithName("date")
@@ -83,7 +83,7 @@ namespace CourseAPI.Responses.Courses
                 .WithTitle("Writer Meeting Waiting")
                 .WithType("application/json")
                 .WithMethod("PATCH")
-                .WithHref(GetBaseURL() + "courses/" + _course.CourseId + "/WriterMeetingWaiting")
+                .WithHref(GetBaseURL() + $"courses/{_course.CourseId}/WriterMeetingWaiting")
                 .WithField(new FieldBuilder()
                     .WithName("complete")
                     .WithType("bool")));
@@ -97,7 +97,7 @@ namespace CourseAPI.Responses.Courses
                 .WithTitle("Set Storyboard Complete")
                 .WithType("application/json")
                 .WithMethod("PATCH")
-                .WithHref(GetBaseURL() + "courses/" + _course.CourseId + "/StoryboardReadyForReview"));
+                .WithHref(GetBaseURL() + $"courses/{_course.CourseId}/StoryboardReadyForReview"));
             return this;
         }
 

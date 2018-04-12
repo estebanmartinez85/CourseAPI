@@ -9,7 +9,7 @@ namespace CourseAPI.Responses.Courses
 {
     public class AssignWriterResponse : CourseEntity
     {
-        public AssignWriterResponse(Controller controller, Course course) : base(controller, course) {
+        public AssignWriterResponse(Course course) : base(course) {
                 this.WithAssignWriter();
         }
     }

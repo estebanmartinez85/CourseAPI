@@ -39,18 +39,21 @@ namespace CourseAPI.Data
             builder.Entity<Library>()
                 .HasMany(l => l.Courses)
                 .WithOne(c => c.Library);
-            builder.Entity<SlideCollection>().Property<string>("SlidesStr").HasField("_slides");
-            builder.Entity<Course>().Ignore("Links");
-            builder.Entity<CourseUsers>().Ignore("Links");
-            builder.Entity<Library>().Ignore("Links");
-            builder.Entity<Storyboard>().Ignore("Links");
-            builder.Entity<Storyboard>().HasOne<SlideCollection>(s => s.Slides);
+            builder.Entity<Storyboard>().Property<string>("GraphicsStr").HasField("_graphics");
+            builder.Entity<Storyboard>().Property<string>("NarrationStr").HasField("_narration");
+            builder.Entity<Timesheet>().Property<string>("WeekStr").HasField("_week");
+//            builder.Entity<Course>().Ignore("Links");
+//            builder.Entity<CourseUsers>().Ignore("Links");
+//            builder.Entity<Library>().Ignore("Links");
+//            builder.Entity<Storyboard>().Ignore("Links");
+            //builder.Entity<Storyboard>().HasOne<SlideCollection>(s => s.Slides);
         }
 
         public DbSet<Course> Courses { get; set; }
         public DbSet<Storyboard> Storyboards { get; set; }
         public DbSet<Library> Libraries { get; set; }
         public DbSet<CourseUsers> CourseUsers { get; set; }
+        public DbSet<Timesheet> Timesheets { get; set; }
 
         public override int SaveChanges()
         {

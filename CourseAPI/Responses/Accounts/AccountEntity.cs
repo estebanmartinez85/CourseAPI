@@ -7,7 +7,7 @@ namespace CourseAPI.Responses.Accounts
 {
     public class AccountEntity : BaseSirenEntity {
         private readonly ApplicationUser _account;
-        public AccountEntity(Controller controller, ApplicationUser account) : base(controller) {
+        public AccountEntity(ApplicationUser account){
             _account = account;
             this.WithClass("account")
                 .WithProperty("id", account.Id)

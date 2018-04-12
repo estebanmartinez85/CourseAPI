@@ -103,6 +103,7 @@ namespace CourseAPI
             services.AddScoped(typeof(LibrariesService));
             services.AddScoped(typeof(AccountsService));
             services.AddScoped(typeof(RolesService));
+            services.AddScoped(typeof(StoryboardServices));
             services.AddApiVersioning();
             services.AddMvc();
             

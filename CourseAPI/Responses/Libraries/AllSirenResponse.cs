@@ -11,13 +11,13 @@ namespace CourseAPI.Responses.Libraries
 {
     public class AllSirenResponse : EntityBuilder
     {
-        public AllSirenResponse(Controller controller, List<Library> libraries)
+        public AllSirenResponse(List<Library> libraries)
         {
             this.WithClass("library")
                 .WithClass("collection")
                 .WithProperty("count", libraries.Count);
             foreach (Library library in libraries) {
-                this.WithSubEntity(new LibraryEntity(controller, library)
+                this.WithSubEntity(new LibraryEntity(library)
                                             .WithEditLibrary()
                                             .WithDeleteLibrary());
             }
@@ -26,7 +26,7 @@ namespace CourseAPI.Responses.Libraries
                     .WithTitle("Add Library")
                     .WithType("application/json")
                     .WithMethod("POST")
-                    .WithHref($"{controller.Request.Scheme}://{controller.Request.Host}{controller.Request.Path}")
+                    .WithHref("http://localhost:5000/api/v1/libraries")
                     .WithField(new FieldBuilder()
                         .WithName("title")
                         .WithType("text")));

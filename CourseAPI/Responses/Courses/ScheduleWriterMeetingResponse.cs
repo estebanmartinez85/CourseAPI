@@ -9,7 +9,7 @@ namespace CourseAPI.Responses.Courses
 {
     public class ScheduleWriterMeetingResponse : CourseEntity
     {
-        public ScheduleWriterMeetingResponse(Controller controller, Course course ) : base(controller, course) {
+        public ScheduleWriterMeetingResponse(Course course ) : base(course) {
             WithScheduleWriterMeeting();
         }
     }

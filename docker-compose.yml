@@ -2,7 +2,7 @@ version: '3'
 
 services:
   courseapi:
-    image: courseapi
+    image: emenis/courseapi
     build:
       context: .
       dockerfile: CourseAPI/Dockerfile

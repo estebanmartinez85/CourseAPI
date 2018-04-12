@@ -5,9 +5,7 @@ namespace CourseAPI.Responses.Libraries
 {
     public class GetLibraryResponse : LibraryEntity
     {
-        public GetLibraryResponse(Controller controller, Library library) : base(controller, library)
-        {
- 
+        public GetLibraryResponse(Library library) : base(library) {
         }
     }
 }

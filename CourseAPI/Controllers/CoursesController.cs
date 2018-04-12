@@ -64,7 +64,7 @@ namespace CourseAPI.Controllers
 
             List<Course> assigned = role == "Administrator" ? _courses.GetAllCourses() : _courses.GetAssigned(id);
 
-            return Ok(new AssignedCoursesResponse(this, assigned).EntityToJson());
+            return Ok(new AssignedCoursesResponse(assigned).EntityToJson());
         }
 
         [HttpPut("{id}")]
@@ -111,7 +111,7 @@ namespace CourseAPI.Controllers
         {
             if (!ModelState.IsValid) return new BadRequestResult();
 
-            Course course = await _courses.Create(model.Title, model.Code, model.LibraryId);
+            Course course = await _courses.Create(model.Code, model.Title, model.LibraryId);
             if (course != null)
                 return CreatedAtAction(nameof(GetCourse), new { id = course.CourseId }, null);
             return new BadRequestResult();

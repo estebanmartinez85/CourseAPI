@@ -238,18 +238,6 @@ namespace CourseAPI.Migrations
                     b.ToTable("Libraries");
                 });
 
-            modelBuilder.Entity("CourseAPI.Models.SlideCollection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("SlidesStr");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SlideCollection");
-                });
-
             modelBuilder.Entity("CourseAPI.Models.Storyboard", b =>
                 {
                     b.Property<int>("StoryboardId")
@@ -265,26 +253,64 @@ namespace CourseAPI.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<string>("Document");
+
+                    b.Property<bool>("GraphicsComplete");
+
+                    b.Property<bool>("GraphicsReadyForReview");
+
+                    b.Property<string>("GraphicsStr");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
+                    b.Property<bool>("NarrationComplete");
+
+                    b.Property<bool>("NarrationReadyForReview");
+
+                    b.Property<string>("NarrationStr");
+
                     b.Property<bool>("ReadyForReview");
-
-                    b.Property<bool>("SlidesGraphicsComplete");
-
-                    b.Property<int?>("SlidesId");
-
-                    b.Property<bool>("SlidesNarrationComplete");
 
                     b.HasKey("StoryboardId");
 
                     b.HasIndex("CourseId")
                         .IsUnique();
 
-                    b.HasIndex("SlidesId");
-
                     b.ToTable("Storyboards");
+                });
+
+            modelBuilder.Entity("CourseAPI.Models.Timesheet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CourseId");
+
+                    b.Property<int?>("TaskId");
+
+                    b.Property<string>("WeekStr");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("Timesheets");
+                });
+
+            modelBuilder.Entity("CourseAPI.Models.TimesheetTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimesheetTask");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -398,10 +424,17 @@ namespace CourseAPI.Migrations
                         .WithOne("Storyboard")
                         .HasForeignKey("CourseAPI.Models.Storyboard", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
 
-                    b.HasOne("CourseAPI.Models.SlideCollection", "Slides")
+            modelBuilder.Entity("CourseAPI.Models.Timesheet", b =>
+                {
+                    b.HasOne("CourseAPI.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("SlidesId");
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("CourseAPI.Models.TimesheetTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

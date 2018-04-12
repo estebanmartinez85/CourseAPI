@@ -10,5 +10,6 @@ namespace CourseAPI
         public const string AdministratorRoleName = "Administrator";
         public const string AdministratorUserName = "esteban.martinez@outlook.com";
         public const string AppName = "CourseAPI";
+        public const string URL = "http://localhost:5000/api/v1/";
     }
 }
