@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CourseAPI.Data.Common.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CourseAPI.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CourseAPI.Data
 {
@@ -17,10 +19,6 @@ namespace CourseAPI.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
-            
             builder.Entity<CourseUsers>()
                 .HasAlternateKey(table => new
                 {
@@ -41,12 +39,8 @@ namespace CourseAPI.Data
                 .WithOne(c => c.Library);
             builder.Entity<Storyboard>().Property<string>("GraphicsStr").HasField("_graphics");
             builder.Entity<Storyboard>().Property<string>("NarrationStr").HasField("_narration");
-            builder.Entity<Timesheet>().Property<string>("WeekStr").HasField("_week");
-//            builder.Entity<Course>().Ignore("Links");
-//            builder.Entity<CourseUsers>().Ignore("Links");
-//            builder.Entity<Library>().Ignore("Links");
-//            builder.Entity<Storyboard>().Ignore("Links");
-            //builder.Entity<Storyboard>().HasOne<SlideCollection>(s => s.Slides);
+            builder.Entity<Timesheet>().Property<string>("RowsStr").HasField("_rows");
+            //builder.Entity<TimesheetRow>().Property<string>("WeekStr").HasField("_week");
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -54,6 +48,7 @@ namespace CourseAPI.Data
         public DbSet<Library> Libraries { get; set; }
         public DbSet<CourseUsers> CourseUsers { get; set; }
         public DbSet<Timesheet> Timesheets { get; set; }
+        public DbSet<TimesheetTask> TimesheetTasks { get; set; }
 
         public override int SaveChanges()
         {
@@ -63,13 +58,13 @@ namespace CourseAPI.Data
 
         private void ApplyAuditInfoRules()
         {
-            var changedEntries = this.ChangeTracker.Entries()
+            IEnumerable<EntityEntry> changedEntries = this.ChangeTracker.Entries()
                 .Where(
                     e => e.Entity is IAuditInfo && (e.State == EntityState.Added || e.State == EntityState.Modified));
 
-            foreach (var entry in changedEntries)
+            foreach (EntityEntry entry in changedEntries)
             {
-                var entity = (IAuditInfo)entry.Entity;
+                IAuditInfo entity = (IAuditInfo)entry.Entity;
                 if (entry.State == EntityState.Added && entity.CreatedOn == default(DateTime))
                 {
                     entity.CreatedOn = DateTime.UtcNow;

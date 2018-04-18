@@ -2,13 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using CourseAPI.Helpers;
 using CourseAPI.Responses.Libraries;
 using CourseAPI.Services;
-using MoreLinq;
 using CourseAPI.Models;
 
 namespace CourseAPI.Controllers

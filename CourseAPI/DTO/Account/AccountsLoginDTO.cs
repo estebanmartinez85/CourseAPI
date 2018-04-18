@@ -9,10 +9,11 @@ namespace CourseAPI.DTO.Account
     public class AccountsLoginDTO
     {
         [Required]
+        [MaxLength(50)]
         public string Email { get; set; }
 
         [Required]
+        [MaxLength(50)]
         public string Password { get; set; }
-
     }
 }

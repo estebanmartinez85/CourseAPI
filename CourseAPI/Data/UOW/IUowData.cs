@@ -10,6 +10,8 @@ namespace CourseAPI.Data.UOW
         IDeletableEntityRepository<Storyboard> Storyboard { get; }
         IDeletableEntityRepository<Library> Libraries { get; }
         IDeletableEntityRepository<CourseUsers> CourseUsers { get; }
+        IDeletableEntityRepository<Timesheet> Timesheets { get; }
+        IDeletableEntityRepository<TimesheetTask> TimesheetTasks { get; }
 
         Task<int> SaveChangesAsync();
         void Dispose();

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,6 @@ namespace CourseAPI.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Authorize(Roles = "Administrator")]
     public class AccountsController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -49,6 +49,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost("{Id}/Role")]
+        [Authorize(Roles = "Administrator")]        
         public async Task<IActionResult> Role([FromRoute] string Id, [FromBody] AccountsRoleDTO model)
         {
             if (ModelState.IsValid)
@@ -74,6 +75,15 @@ namespace CourseAPI.Controllers
             }
 
             return new BadRequestResult();
+        }
+
+        [HttpGet("assignable")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAssignableUsers() {
+            IList<ApplicationUser> users = await _accountsService.GetAssignableUsers();
+            ReadOnlyCollection<ApplicationUser> readOnlyCollection = new ReadOnlyCollection<ApplicationUser>(users);
+            AccountsResponse response = new AccountsResponse(readOnlyCollection);
+            return Ok(response.EntityToJson());
         }
 
         [HttpPost("Login")]
@@ -150,6 +160,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Add([FromBody] AccountsAddDTO model)
         {
             if (!ModelState.IsValid) return new BadRequestResult();
@@ -169,17 +180,27 @@ namespace CourseAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult List()
         {
             List<string> users = (from u in _userManager.Users
                                   select u.Email).ToList();
             return Ok(users);
         }
-        
-        
-        
+
+
+        [HttpGet("info")]
+        [Authorize(Roles = "Administrator, Writer, Narrator, Artist")]
+        public async Task<IActionResult> GetUserInfo() {
+            ApplicationUser user =
+                await _accountsService.UserInfo(HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            AccountEntity entity = new AccountEntity(user);
+            
+            return Ok(entity.EntityToJson());
+        }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Update([FromRoute] string id, [FromBody] AccountsEditDTO model)
         {
             if (!ModelState.IsValid) return new BadRequestResult();

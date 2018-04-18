@@ -15,22 +15,16 @@ namespace CourseAPI.Data.UOW
         private readonly Dictionary<Type, object> repositories = new Dictionary<Type, object>();
 
 
-        public IDeletableEntityRepository<Course> Course {
-            get { return this.GetRepository<Course>(); }
-        }
-        public IDeletableEntityRepository<Storyboard> Storyboard {
-            get { return this.GetRepository<Storyboard>(); }
-        }
-        public IDeletableEntityRepository<Library> Libraries {
-            get { return this.GetRepository<Library>(); }
-        }
-        public IDeletableEntityRepository<CourseUsers> CourseUsers {
-            get { return this.GetRepository<CourseUsers>(); }
-        }
+        public IDeletableEntityRepository<Course> Course => this.GetRepository<Course>();
+        public IDeletableEntityRepository<Storyboard> Storyboard => this.GetRepository<Storyboard>();
+        public IDeletableEntityRepository<Library> Libraries => this.GetRepository<Library>();
+        public IDeletableEntityRepository<CourseUsers> CourseUsers => this.GetRepository<CourseUsers>();
+        public IDeletableEntityRepository<Timesheet> Timesheets => this.GetRepository<Timesheet>();
+        public IDeletableEntityRepository<TimesheetTask> TimesheetTasks => this.GetRepository<TimesheetTask>();
+
         public UowData(ApplicationDbContext context)
         {
             this.context = context;
-
         }
 
         private IDeletableEntityRepository<T> GetRepository<T>() where T : BaseModel

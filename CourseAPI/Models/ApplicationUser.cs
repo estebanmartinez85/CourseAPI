@@ -24,6 +24,9 @@ namespace CourseAPI.Models
         public DateTime? DeletedOn { get; set; }
 
         [JsonProperty]
+        public Timesheet CurrentTimesheet { get; set; }
+        
+        [JsonProperty]
         public string FirstName { get; set; }
         
         [JsonProperty]

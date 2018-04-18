@@ -66,9 +66,10 @@ namespace CourseAPI
             else
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DOLive")));
-                issuer = Configuration["AuthLive:Issuer"];
-                secret = Configuration["AuthLive:Secret"];
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+                issuer = Configuration["Auth:Issuer"];
+                secret = Configuration["Auth:Secret"];
             }
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -104,6 +105,8 @@ namespace CourseAPI
             services.AddScoped(typeof(AccountsService));
             services.AddScoped(typeof(RolesService));
             services.AddScoped(typeof(StoryboardServices));
+            services.AddScoped(typeof(TimesheetService));
+            services.AddScoped(typeof(TasksService));
             services.AddApiVersioning();
             services.AddMvc();
             

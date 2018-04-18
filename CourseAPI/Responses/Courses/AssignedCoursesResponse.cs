@@ -8,7 +8,7 @@ using CourseAPI.Models;
 
 namespace CourseAPI.Responses.Courses
 {
-    public class AssignedCoursesResponse : EntityBuilder
+    public class AssignedCoursesResponse : EntityBuilder, ISubEntityBuilder
     {
         public AssignedCoursesResponse(List<Course> courses) {
             this.WithClass("course")

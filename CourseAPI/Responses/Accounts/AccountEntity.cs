@@ -12,6 +12,9 @@ namespace CourseAPI.Responses.Accounts
             this.WithClass("account")
                 .WithProperty("id", account.Id)
                 .WithProperty("username", account.UserName)
+                .WithProperty("email", account.Email)
+                .WithProperty("name", account.FullName)
+                .WithProperty("timesheet", account.CurrentTimesheet)
                 .WithLink(new LinkBuilder()
                     .WithRel("self")
                     .WithHref(GetBaseURL() + "accounts/" + account.Id));

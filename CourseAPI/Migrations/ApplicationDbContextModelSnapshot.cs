@@ -65,6 +65,8 @@ namespace CourseAPI.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<Guid?>("CurrentTimesheetId");
+
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<string>("Email")
@@ -104,6 +106,10 @@ namespace CourseAPI.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CurrentTimesheetId")
+                        .IsUnique()
+                        .HasFilter("[CurrentTimesheetId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -286,17 +292,21 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CourseId");
+                    b.Property<DateTime>("BeginDate");
 
-                    b.Property<int?>("TaskId");
+                    b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("WeekStr");
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("RowsStr");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("TaskId");
 
                     b.ToTable("Timesheets");
                 });
@@ -306,11 +316,19 @@ namespace CourseAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimesheetTask");
+                    b.ToTable("TimesheetTasks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -397,6 +415,13 @@ namespace CourseAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CourseAPI.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("CourseAPI.Models.Timesheet", "CurrentTimesheet")
+                        .WithOne("User")
+                        .HasForeignKey("CourseAPI.Models.ApplicationUser", "CurrentTimesheetId");
+                });
+
             modelBuilder.Entity("CourseAPI.Models.Course", b =>
                 {
                     b.HasOne("CourseAPI.Models.Library", "Library")
@@ -424,17 +449,6 @@ namespace CourseAPI.Migrations
                         .WithOne("Storyboard")
                         .HasForeignKey("CourseAPI.Models.Storyboard", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CourseAPI.Models.Timesheet", b =>
-                {
-                    b.HasOne("CourseAPI.Models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("CourseAPI.Models.TimesheetTask", "Task")
-                        .WithMany()
-                        .HasForeignKey("TaskId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
